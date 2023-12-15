@@ -11,6 +11,7 @@ const SignUpRoute = require("./routes/register.js");
 const loginRoute = require("./routes/Signin.js");
 
 const app = express();
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json()); // This replaces body-parser for JSON parsing
@@ -24,6 +25,6 @@ app.use(DeleteRoute);
 app.use(SignUpRoute);
 app.use(loginRoute);
 
-app.listen(5000, () => {
+app.listen(port, () => {
   console.log("The server is running on port 5000");
 });
