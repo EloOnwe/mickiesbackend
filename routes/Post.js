@@ -17,10 +17,11 @@ router.post("/book", async (req, res) => {
       throw error;
     }
     if (data) {
-      res.status(200).json({ message: "Successfully added" });
+      return res.status(200).json({ message: "Successfully added" });
     }
   } catch (error) {
     console.log(error);
+    return res.status(500).json(error.message);
   }
 });
 

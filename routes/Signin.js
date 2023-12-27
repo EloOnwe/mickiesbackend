@@ -27,7 +27,9 @@ router.post(
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
       if (data) {
         return res.status(201).json({
           message: "login successful",
@@ -35,7 +37,7 @@ router.post(
         });
       }
     } catch (error) {
-      console.error(error.message);
+      return res.status(402).json(error.message);
     }
   }
 );

@@ -15,36 +15,33 @@ router.post(
       .isLowercase(),
   ],
   async (req, res) => {
-    const { username, email, password } = req.body;
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
-      return res.status(401).json({
-        errors: errors.array(),
-      });
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            username,
-          },
-        },
-      });
+    const { username, email, password } = req.body;
 
-      if (data) {
-        return res.status(201).json({
-          data,
-          message: "Check your email for confirmation",
-        });
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("email", email);
+      if (data.length > 0) {
+        return res.status(202).json({ message: "User exits already" });
+      } else if (!data.length > 0) {
+        supabase.auth.signUp({ username, email, password });
+        return res
+          .status(201)
+          .json({ message: "Successful, check your email for confirmation" });
       }
+
       if (error) {
         throw error;
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 );
